@@ -1,0 +1,8 @@
+---
+- name: Install nodejs
+  ansible.builtin.include_tasks: install.yml
+  when: node_uninstall is undefined or (node_uninstall is defined and node_uninstall == false)
+
+- name: Uninstall nodejs
+  ansible.builtin.include_tasks: uninstall.yml
+  when: node_uninstall is defined and node_uninstall == true

@@ -1,0 +1,34 @@
+---
+- name: Download .asc key and convert to a binary .gpg because /usr/share/keyrings cannot take .asc keys
+  ansible.builtin.command:
+    cmd: "gpg --dearmor"
+    stdin: "{{ lookup('ansible.builtin.url', '{{ node_key_url }}', split_lines=False) }}"
+  register: output
+
+- name: Copy key
+  become: true
+  ansible.builtin.copy:
+    content: "{{ output.stdout }}"
+    dest: "{{ node_key_path }}{{ node_key_name }}"
+
+- name: Add NodeSource repositories for Node.js
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by={{ node_key_path }}{{ node_key_name }}] https://deb.nodesource.com/node_{{ node_version }} {{ ansible_distribution_release }} main"
+    filename: "{{ node_repository_name }}"
+    update_cache: true 
+    state: present
+
+- name: Add NodeSource repositories for Node.js
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb-src [signed-by={{ node_key_path }}{{ node_key_name }}] https://deb.nodesource.com/node_{{ node_version }} {{ ansible_distribution_release }} main"
+    filename: "{{ node_repository_name }}"
+    update_cache: true 
+    state: present
+
+- name: Install nodejs
+  become: true
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
