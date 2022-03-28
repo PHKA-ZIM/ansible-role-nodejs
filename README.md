@@ -20,8 +20,6 @@ ansible-galaxy install -r requirements.yml --roles-path ./roles
 - Import role and override role variables, e.g.
 ```
 - name: Setup nodejs
-  hosts: localhost
-  connection: local
   roles:
     - role: ansible-role-nodejs
       vars:
