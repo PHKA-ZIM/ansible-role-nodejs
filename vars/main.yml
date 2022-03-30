@@ -1,5 +1,5 @@
 ---
-node_key_url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-node_key_path: /usr/share/keyrings/
-node_key_name: nodesource.gpg
-node_repository_name: nodesource
+nodejs_key_url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+nodejs_key_path: /usr/share/keyrings/
+nodejs_key_name: nodesource.gpg
+nodejs_repository_name: nodesource

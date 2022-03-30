@@ -1,29 +1,39 @@
 ---
-- name: Download .asc key and convert to a binary .gpg because /usr/share/keyrings cannot take .asc keys
+
+- name: Download .asc key and register as variable
+  ansible.builtin.uri:
+    url: "{{ nodejs_key_url }}"
+    return_content: yes
+  register: response
+  until: '"PGP PUBLIC KEY" in response.content'
+  retries: 10
+  delay: 1
+
+- name: Convert it into a binary .gpg because /usr/share/keyrings cannot take .asc keys
   ansible.builtin.command:
     cmd: "gpg --dearmor"
-    stdin: "{{ lookup('ansible.builtin.url', '{{ node_key_url }}', split_lines=False) }}"
+    stdin: "{{ response.content }}"
   register: output
 
 - name: Copy key
   become: true
   ansible.builtin.copy:
     content: "{{ output.stdout }}"
-    dest: "{{ node_key_path }}{{ node_key_name }}"
+    dest: "{{ nodejs_key_path }}{{ nodejs_key_name }}"
 
 - name: Add NodeSource repositories for Node.js
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb [signed-by={{ node_key_path }}{{ node_key_name }}] https://deb.nodesource.com/node_{{ node_version }} {{ ansible_distribution_release }} main"
-    filename: "{{ node_repository_name }}"
+    repo: "deb [signed-by={{ nodejs_key_path }}{{ nodejs_key_name }}] https://deb.nodesource.com/node_{{ nodejs_version }} {{ ansible_distribution_release }} main"
+    filename: "{{ nodejs_repository_name }}"
     update_cache: true 
     state: present
 
 - name: Add NodeSource repositories for Node.js
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb-src [signed-by={{ node_key_path }}{{ node_key_name }}] https://deb.nodesource.com/node_{{ node_version }} {{ ansible_distribution_release }} main"
-    filename: "{{ node_repository_name }}"
+    repo: "deb-src [signed-by={{ nodejs_key_path }}{{ nodejs_key_name }}] https://deb.nodesource.com/node_{{ nodejs_version }} {{ ansible_distribution_release }} main"
+    filename: "{{ nodejs_repository_name }}"
     update_cache: true 
     state: present
 
