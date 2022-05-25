@@ -10,12 +10,6 @@
       - nodejs
     installer_uninstall: true
 
-- name: Update repositories cache
-  become: true
-  ansible.builtin.apt:
-    update_cache: true
-    cache_valid_time: 3600
-
 - name: Remove key
   become: true
   ansible.builtin.file:

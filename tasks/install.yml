@@ -1,17 +1,16 @@
 ---
-
 - name: Download .asc key and register as variable
   ansible.builtin.uri:
     url: "{{ nodejs_key_url }}"
     return_content: yes
   register: response
-  until: '"PGP PUBLIC KEY" in response.content'
+  until: "'PGP PUBLIC KEY' in response.content"
   retries: 10
-  delay: 1
+  delay: 5
 
 - name: Convert it into a binary .gpg because /usr/share/keyrings cannot take .asc keys
   ansible.builtin.command:
-    cmd: "gpg --dearmor"
+    cmd: gpg --dearmor
     stdin: "{{ response.content }}"
   register: output
 
