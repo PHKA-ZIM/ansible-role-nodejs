@@ -18,7 +18,7 @@
   become: true
   ansible.builtin.copy:
     content: "{{ output.stdout }}"
-    dest: "{{ nodejs_key_path }}{{ nodejs_key_name }}"
+    dest: "{{ nodejs_key_path }}/{{ nodejs_key_name }}"
 
 - name: Add repositories for Node.js and install it
   ansible.builtin.import_role:  
