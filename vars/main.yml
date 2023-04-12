@@ -1,4 +1,4 @@
 ---
 nodejs_key_url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-nodejs_key_path: /usr/share/keyrings/
+nodejs_key_path: /etc/apt/keyrings/
 nodejs_key_name: nodesource.gpg
