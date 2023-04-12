@@ -14,6 +14,6 @@
   ansible.builtin.import_role:
     name: ansible-role-aptkey
   vars:
-    aptkey_name: nodejs_key_name
-    aptkey_path: nodejs_key_path
+    aptkey_name: "{{ nodejs_key_name }}"
+    aptkey_path: "{{ nodejs_key_path }}"
     aptkey_uninstall: true

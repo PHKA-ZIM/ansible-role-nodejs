@@ -3,9 +3,9 @@
   ansible.builtin.import_role:
     name: ansible-role-aptkey
   vars:
-    aptkey_url: nodejs_key_url
-    aptkey_name: nodejs_key_name
-    aptkey_path: nodejs_key_path
+    aptkey_url: "{{ nodejs_key_url }}"
+    aptkey_name: "{{ nodejs_key_name }}"
+    aptkey_path: "{{ nodejs_key_path }}"
 
 - name: Add repositories for Node.js and install it
   ansible.builtin.import_role:
