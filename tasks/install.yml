@@ -1,27 +1,14 @@
 ---
-- name: Download .asc key and register as variable
-  ansible.builtin.uri:
-    url: "{{ nodejs_key_url }}"
-    return_content: yes
-  register: response
-  until: "'PGP PUBLIC KEY' in response.content"
-  retries: 10
-  delay: 5
-
-- name: Convert it into a binary .gpg because /usr/share/keyrings cannot take .asc keys
-  ansible.builtin.command:
-    cmd: gpg --dearmor
-    stdin: "{{ response.content }}"
-  register: output
-
-- name: Copy key
-  become: true
-  ansible.builtin.copy:
-    content: "{{ output.stdout }}"
-    dest: "{{ nodejs_key_path }}/{{ nodejs_key_name }}"
+- name: Add apt key
+  ansible.builtin.import_role:
+    name: ansible-role-aptkey
+  vars:
+    aptkey_url: nodejs_key_url
+    aptkey_name: nodejs_key_name
+    aptkey_path: nodejs_key_path
 
 - name: Add repositories for Node.js and install it
-  ansible.builtin.import_role:  
+  ansible.builtin.import_role:
     name: ansible-role-installer
   vars:
     installer_repositories:

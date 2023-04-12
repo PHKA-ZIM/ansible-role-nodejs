@@ -10,8 +10,10 @@
       - nodejs
     installer_uninstall: true
 
-- name: Remove key
-  become: true
-  ansible.builtin.file:
-    path: "{{ nodejs_key_path }}{{ nodejs_key_name }}"
-    state: absent
+- name: Remove apt key
+  ansible.builtin.import_role:
+    name: ansible-role-aptkey
+  vars:
+    aptkey_name: nodejs_key_name
+    aptkey_path: nodejs_key_path
+    aptkey_uninstall: true
