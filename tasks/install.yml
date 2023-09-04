@@ -7,12 +7,18 @@
     aptkey_name: "{{ nodejs_key_name }}"
     aptkey_path: "{{ nodejs_key_path }}"
 
-- name: Add repositories for Node.js and install it
-  ansible.builtin.import_role:
-    name: ansible-role-installer
-  vars:
-    installer_repositories:
-      - "deb [signed-by={{ nodejs_key_path }}{{ nodejs_key_name }}] https://deb.nodesource.com/node_{{ nodejs_version }} {{ ansible_distribution_release }} main"
-      - "deb-src [signed-by={{ nodejs_key_path }}{{ nodejs_key_name }}] https://deb.nodesource.com/node_{{ nodejs_version }} {{ ansible_distribution_release }} main"
-    installer_packages:
-      - nodejs
+- name: Ensure that repositories are installed
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    update_cache: true
+    state: present
+  loop: "{{ nodejs_repositories }}"
+
+- name: Ensure that packages are installed
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    update_cache: true
+    state: present
+  loop: "{{ nodejs_packages }}"

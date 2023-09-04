@@ -1,8 +1,12 @@
 ---
 - name: Install nodejs
-  ansible.builtin.include_tasks: install.yml
   when: nodejs_uninstall == false
+  block:
+    - name: Install
+      ansible.builtin.include_tasks: install.yml
 
 - name: Uninstall nodejs
-  ansible.builtin.include_tasks: uninstall.yml
   when: nodejs_uninstall == true
+  block:
+    - name: Uninstall
+      ansible.builtin.include_tasks: uninstall.yml
