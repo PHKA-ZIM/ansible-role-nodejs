@@ -1,5 +1,5 @@
 ---
-nodejs_version: "18.x" # E.g. "17.x", "16.x", "15.x"
+nodejs_version: "20.x" # E.g. "17.x", "16.x", "15.x"
 
 nodejs_uninstall: false
 nodejs_autoremove: true
